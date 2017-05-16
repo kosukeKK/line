@@ -1,4 +1,4 @@
-class Comment
+class Sample
   include Mongoid::Document
   include Mongoid::Timestamps
 
