@@ -5,6 +5,7 @@ var CommentBox = React.createClass({
       dataType: 'json',
       success: function(result) {
         this.setState({data: result.data});
+        this.setState({current_user: this.props.current_user})
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -12,7 +13,10 @@ var CommentBox = React.createClass({
     });
   },
   getInitialState: function() {
-    return {data: []};
+    return {
+      data: [],
+      current_user: ""
+    };
   },
   componentDidMount: function() {
     this.loadCommentsFromServer();
@@ -37,7 +41,7 @@ var CommentBox = React.createClass({
       <div className="commentBox">
         <h1>Comments</h1>
         <CommentList data={this.state.data} />
-        <CommentForm onCommentSubmit={this.handleCommentSubmit}/>
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} current_user={this.props.current_user}/>
       </div>
     );
   }
@@ -48,9 +52,9 @@ var CommentList = React.createClass({
   render: function() {
     var commentNodes = this.props.data.map(function (comment) {
       return (
-        <Comment author={comment.author}>
+        <div>
           {comment.text}
-        </Comment>
+        </div>
       );
     });
     return (
@@ -65,13 +69,13 @@ var CommentForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var author = this.refs.author.value.trim();
+    var user_id = this.refs.user_id.value;
     var text = this.refs.text.value.trim();
-    if (!text || !author) {
+    if (!text || !user_id) {
       return;
     }
-    this.props.onCommentSubmit({author: author, text: text}); // ここでcallback実行する！
-    this.refs.author.value = '';
+    this.props.onCommentSubmit({user_id: user_id, text: text}); // ここでcallback実行する！
+    this.refs.user_id.value = '';
     this.refs.text.value = '';
     return;
   },
@@ -79,27 +83,10 @@ var CommentForm = React.createClass({
   render: function() {
     return (
       <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Your name" ref="author" />
-        <input type="text" placeholder="Say something..." ref="text" />
+        <input type="hidden" ref="user_id" value={this.props.current_user._id.$oid}/>
+        <input type="text" placeholder="メッセージを入力" ref="text" />
         <input type="submit" value="Post" />
       </form>
-    );
-  }
-});
-
-
-var Comment = React.createClass({
-  render: function() {
-    var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
-    return (
-      <div className="comment">
-        <h2 className="commentAuthor">
-          {this.props.author}
-        </h2>
-        <span dangerouslySetInnerHTML={{
-          __html: rawMarkup
-        }}/>
-      </div>
     );
   }
 });
