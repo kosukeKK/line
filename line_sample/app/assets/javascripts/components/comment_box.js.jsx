@@ -5,6 +5,7 @@ var CommentBox = React.createClass({
       dataType: 'json',
       success: function(result) {
         this.setState({data: result.data});
+        this.setState({current_user: this.props.current_user})
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -12,13 +13,19 @@ var CommentBox = React.createClass({
     });
   },
   getInitialState: function() {
-    return {data: []};
+    return {
+      data: [],
+      current_user: ""
+    };
+
   },
   componentDidMount: function() {
     this.loadCommentsFromServer();
     setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   handleCommentSubmit: function(comment) {
+    comment.user_id = "591b9deed283156c49597b6a";
+    console.log(comment);
     $.ajax({
       url: this.props.url,
       dataType: 'json',
@@ -26,6 +33,7 @@ var CommentBox = React.createClass({
       data: comment,
       success: function(data) {
         this.setState({data: this.state.data.concat([data])});
+        console.log("sss");
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -35,9 +43,9 @@ var CommentBox = React.createClass({
   render: function() {
     return (
       <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm onCommentSubmit={this.handleCommentSubmit}/>
+        <h1>{this.props.current_user.email}</h1>
+        <CommentList data={this.state.data} current_user={this.props.current_user}/>
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} current_user={this.props.current_user}/>
       </div>
     );
   }
@@ -48,7 +56,7 @@ var CommentList = React.createClass({
   render: function() {
     var commentNodes = this.props.data.map(function (comment) {
       return (
-        <Comment author={comment.author}>
+        <Comment>
           {comment.text}
         </Comment>
       );
@@ -65,13 +73,11 @@ var CommentForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var author = this.refs.author.value.trim();
     var text = this.refs.text.value.trim();
-    if (!text || !author) {
+    if (!text) {
       return;
     }
-    this.props.onCommentSubmit({author: author, text: text}); // ここでcallback実行する！
-    this.refs.author.value = '';
+    this.props.onCommentSubmit({user_id: this.refs.from_user.value ,text: text}); // ここでcallback実行する！
     this.refs.text.value = '';
     return;
   },
@@ -79,8 +85,8 @@ var CommentForm = React.createClass({
   render: function() {
     return (
       <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Your name" ref="author" />
         <input type="text" placeholder="Say something..." ref="text" />
+        <input type="hidden" ref="from_user" value={this.props.current_user._id} />
         <input type="submit" value="Post" />
       </form>
     );
@@ -93,9 +99,6 @@ var Comment = React.createClass({
     var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
     return (
       <div className="comment">
-        <h2 className="commentAuthor">
-          {this.props.author}
-        </h2>
         <span dangerouslySetInnerHTML={{
           __html: rawMarkup
         }}/>

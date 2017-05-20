@@ -1,6 +1,6 @@
 class Api::V1::CommentsController < ApplicationController
   def index
-    @data = Comment.all
+    @data = Comment.where(user_id: current_user.id)
   end
 
   def create
@@ -11,6 +11,7 @@ class Api::V1::CommentsController < ApplicationController
   private
 
   def comment_params
-    params.permit(:author, :text)
+    binding.pry
+    params.permit(:text, :user_id)
   end
 end
