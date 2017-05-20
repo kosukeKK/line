@@ -1,1 +1,2 @@
-= react_component('CommentBox', url: '/api/v1/comments.json', pollInterval: 2000)
+= "ログイン中" if current_user.present?
+= react_component('CommentBox', url: '/api/v1/comments.json', pollInterval: 2000, current_user: current_user)

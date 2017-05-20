@@ -96,7 +96,7 @@ development:
         # Whether or not to do peer certification validation. (default: true)
         # ssl_verify: true
 
-        # The file containing a set of concatenated certification authority certifications
+        # The file containing a set of concatenated certification user_idity certifications
         # used to validate certs passed from the other end of the connection.
         # ssl_ca_cert: /path/to/ca.cert
 
