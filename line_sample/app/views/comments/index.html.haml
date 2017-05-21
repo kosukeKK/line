@@ -1,1 +1,3 @@
+%h1 Comments
+= "#{@to_user.name}とのトーク"
 = react_component('CommentBox', url: '/api/v1/comments.json', pollInterval: 2000, current_user: current_user)

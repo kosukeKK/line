@@ -5,5 +5,5 @@ class TalkThread
   field :first_user_id
   field :second_user_id
 
-  has_many :comment
+  has_many :comment, dependent: :destroy
 end
