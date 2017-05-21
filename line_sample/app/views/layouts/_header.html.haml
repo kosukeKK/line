@@ -1,0 +1,17 @@
+.header{class:"navbar-fixed-top"}
+  .header_left_content
+    = link_to "Line", root_path, id:'logo'
+    気軽にチャット♪
+  .header_right_content
+    .icon
+      #i.fa.fa-search
+    .icon
+      .menu
+        #i.fa.fa-bars
+        %ul.pulldown
+          .list
+            - if user_signed_in?
+              %li= link_to "ログアウト", destroy_user_session_path, method: :delete
+            - else
+              %li= link_to "会員登録", new_user_registration_path
+              %li= link_to "ログイン", new_user_session_path

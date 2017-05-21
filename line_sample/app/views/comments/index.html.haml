@@ -1,12 +1,1 @@
-- if user_signed_in?
-  %li= link_to "ログアウト", destroy_user_session_path, method: :delete
-- else
-  %li= link_to "会員登録", new_user_registration_path
-  %li= link_to "ログイン", new_user_session_path
-ログインユーザー
-%br
-= current_user.id
-%br
-= current_user.email
-
 = react_component('CommentBox', url: '/api/v1/comments.json', pollInterval: 2000, current_user: current_user)

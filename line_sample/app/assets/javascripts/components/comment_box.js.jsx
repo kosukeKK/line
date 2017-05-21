@@ -30,6 +30,13 @@ var CommentBox = React.createClass({
       data: comment,
       success: function(data) {
         this.setState({data: this.state.data.concat([data])});
+        {
+          //スクロールするだけ
+          $('html, body').animate({
+            scrollTop: $(document).height()
+          },1500);
+          return false;
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -53,7 +60,10 @@ var CommentList = React.createClass({
     var commentNodes = this.props.data.map(function (comment) {
       return (
         <div>
-          {comment.text}
+          <div className="comment">
+            {comment.text}
+          </div>
+          <div className="space"/>
         </div>
       );
     });
@@ -74,7 +84,7 @@ var CommentForm = React.createClass({
     if (!text || !user_id) {
       return;
     }
-    this.props.onCommentSubmit({user_id: user_id, text: text}); // ここでcallback実行する！
+    this.props.onCommentSubmit({user_id: user_id, text: text});
     this.refs.user_id.value = '';
     this.refs.text.value = '';
     return;
@@ -84,8 +94,7 @@ var CommentForm = React.createClass({
     return (
       <form className="commentForm" onSubmit={this.handleSubmit}>
         <input type="hidden" ref="user_id" value={this.props.current_user._id.$oid}/>
-        <input type="text" placeholder="メッセージを入力" ref="text" />
-        <input type="submit" value="Post" />
+        <input type="text" placeholder="メッセージを入力" ref="text" className="navbar-fixed-bottom" />
       </form>
     );
   }
