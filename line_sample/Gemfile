@@ -53,6 +53,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'database_cleaner'
   gem 'better_errors'
   gem 'xray-rails'
   gem 'rspec-rails'
