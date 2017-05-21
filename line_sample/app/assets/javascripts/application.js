@@ -18,3 +18,11 @@
 //= require components
 //= require_tree .
 //= require marked
+
+
+$(function(){
+  var $menu = $(".menu");
+  $menu.on('click', function(){
+    $(".pulldown").toggle();
+  });
+});

@@ -10,6 +10,7 @@ end
 gem 'devise'
 
 #画面周り##################################
+gem 'bootstrap-sass'
 gem 'haml-rails'
 gem 'react-rails', '~> 1.0'
 gem 'marked-rails'
