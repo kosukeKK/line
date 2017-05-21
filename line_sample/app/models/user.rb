@@ -5,8 +5,10 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :comment
+  has_many :comment, dependent: :destroy
+
   ## Database authenticatable
+  field :name, type: String
   field :email,              type: String, default: ""
   field :encrypted_password, type: String, default: ""
   ## Recoverable
