@@ -11,6 +11,7 @@
         %ul.pulldown
           .list
             - if user_signed_in?
+              %li= link_to "トーク履歴", talk_log_path
               %li= current_user.name
               %li= link_to "ログアウト", destroy_user_session_path, method: :delete
             - else
