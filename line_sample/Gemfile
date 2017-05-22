@@ -54,6 +54,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "railroady"
   gem 'database_cleaner'
   gem 'better_errors'
   gem 'xray-rails'
