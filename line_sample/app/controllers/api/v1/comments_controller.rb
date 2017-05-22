@@ -11,8 +11,9 @@ class Api::V1::CommentsController < ApplicationController
 
   private
   def find_to_user_id
-    user_id = /to_user=/.match(request.referer).post_match
-    User.where(id: user_id).first&.id
+    if user_id = /to_user=/.match(request.referer)
+      User.where(id: user_id.post_match).first&.id
+    end
   end
 
   def comment_params
@@ -23,8 +24,6 @@ class Api::V1::CommentsController < ApplicationController
     if to_user_id = find_to_user_id.presence
       talk_thread = TalkThread.where(:first_user_id.in => [to_user_id, current_user.id], :second_user_id.in => [to_user_id, current_user.id]).first
       params["talk_thread_id"] = talk_thread ? talk_thread.id : create_talk_thread(to_user_id)
-    else
-      # params["talk_thread_id"] = admin
     end
   end
 
