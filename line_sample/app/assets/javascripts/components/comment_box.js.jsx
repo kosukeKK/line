@@ -46,7 +46,7 @@ var CommentBox = React.createClass({
   render: function() {
     return (
       <div className="commentBox">
-        <CommentList data={this.state.data} />
+        <CommentList data={this.state.data} current_user={this.props.current_user} />
         <CommentForm onCommentSubmit={this.handleCommentSubmit} current_user={this.props.current_user}/>
       </div>
     );
@@ -56,13 +56,14 @@ var CommentBox = React.createClass({
 
 var CommentList = React.createClass({
   render: function() {
-    var commentNodes = this.props.data.map(function (comment) {
+    var current_user_id = this.props.current_user._id.$oid;
+    var commentNodes = this.props.data.map(function (comment, index, arr) {
+      var comment_owner_is_current_user = current_user_id == comment.user_id.$oid ? true : false;
+      var user = comment_owner_is_current_user ? "あなた" : "あいて";
+      var color_owner = comment_owner_is_current_user ? "my_comment" : "partner_comment";
       return (
-        <div>
-          <div className="comment">
-            {comment.text}
-          </div>
-          <div className="space"/>
+        <div className={index == arr.length - 1 ? "enf_of_list" : ""}>
+          <span className={color_owner}>{user}</span>:<div className="comment">{comment.text}</div><span className="space"/>
         </div>
       );
     });
