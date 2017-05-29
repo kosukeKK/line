@@ -62,8 +62,10 @@ var CommentList = React.createClass({
       var user = comment_owner_is_current_user ? "あなた" : "あいて";
       var color_owner = comment_owner_is_current_user ? "my_comment" : "partner_comment";
       return (
-        <div className={index == arr.length - 1 ? "enf_of_list" : ""}>
-          <span className={color_owner}>{user}</span>:<div className="comment">{comment.text}</div><span className="space"/>
+        <div className={color_owner}>
+          <div className={index == arr.length - 1 ? "enf_of_list" : ""}>
+            <span>{user}</span>:<div className="comment">{comment.text}</div>
+          </div>
         </div>
       );
     });
